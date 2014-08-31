@@ -1,0 +1,27 @@
+{
+	"name": "sksoft/phalcon-mailer",
+
+	"description": "description_text",
+	"minimum-stability": "stable",
+	"license": "proprietary",
+
+	"authors": [
+		{
+			"name": "Stanislav Kiryukhin",
+			"email": "korsar.zn@gmail.com",
+			"role": "Founder and project lead"
+		}
+	],
+
+	"require": {
+		"php": ">=5.4.0",
+		"swiftmailer/swiftmailer": "5.1.*@dev"
+	},
+
+	"autoload": {
+
+		"psr-4": {
+			"sKSoft\\Phalcon\\Mailer\\": "src/"
+		}
+	}
+}
