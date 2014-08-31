@@ -24,8 +24,14 @@ use Phalcon\Config;
  */
 class Mailer extends Component
 {
-	public function __construct()
+	protected $config;
+
+	/**
+	 * @param array $config
+	 */
+	public function __construct(Array $config = null)
 	{
+		$this->configure($config);
 		$this->registerSwiftMailer();
 	}
 
@@ -100,16 +106,16 @@ class Mailer extends Component
 		{
 			$config = $this->getConfig();
 
-			$transport = \Swift_SmtpTransport::newInstance($config->host, $config->port);
+			$transport = \Swift_SmtpTransport::newInstance($config['host'], $config['port']);
 
-			if($config->encryption)
-				$transport->setEncryption($config->encryption);
+			if($config['encryption'])
+				$transport->setEncryption($config['encryption']);
 
 
-			if($config->username)
+			if($config['username'])
 			{
-				$transport->setUsername($config->username);
-				$transport->setPassword($config->password);
+				$transport->setUsername($config['username']);
+				$transport->setPassword($config['password']);
 			}
 
 			return $transport;
@@ -121,7 +127,7 @@ class Mailer extends Component
 	{
 		$this->getDI()->set('swift.transport', function()
 		{
-			return \Swift_SendmailTransport::newInstance($this->getConfig('sendmail'));
+			return \Swift_SendmailTransport::newInstance($this->getConfig('sendmail', '/usr/sbin/sendmail -bs'));
 
 		}, true);
 
@@ -136,24 +142,33 @@ class Mailer extends Component
 	}
 
 	/**
+	 * @param $config
+	 */
+	protected function configure(Array $config)
+	{
+		if($config === null)
+			$this->config = (array)$this->getDI()->get('config')->mail->toArray();
+		else
+			$this->config = $config;
+	}
+
+	/**
 	 * @param null $key
 	 * @param null $default
 	 *
-	 * @return Config
+	 * @return mixed
 	 */
 	protected function getConfig($key = null, $default = null)
 	{
-		$config = $this->getDI()->get('config')->mail;
-
 		if($key !== null)
 		{
-			if(isset($config[$key]))
-				return $config[$key];
+			if(isset($this->config[$key]))
+				return $this->config[$key];
 			else
 				return $default;
 		}
 		else
-			return $config;
+			return $this->config;
 	}
 
 	/**
