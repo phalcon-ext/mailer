@@ -24,15 +24,32 @@ use Phalcon\Config;
  */
 class Mailer extends Component
 {
+	/**
+	 * @var array
+	 */
 	protected $config;
+
+	/**
+	 * @var mixed
+	 */
+	protected $transport;
+
+	/**
+	 * @var \Swift_Mailer
+	 */
+	protected $mailer;
+
+	/**
+	 * @var View\Simple
+	 */
+	protected $view;
 
 	/**
 	 * @param array $config
 	 */
-	public function __construct(Array $config = null)
+	public function __construct(Array $config)
 	{
 		$this->configure($config);
-		$this->registerSwiftMailer();
 	}
 
 	/**
@@ -40,13 +57,20 @@ class Mailer extends Component
 	 */
 	public function getSwift()
 	{
-		return $this->getDI()->get('swift.mailer');
+		return $this->mailer;
 	}
 
-	public function createMessageViaView($view, $params = [])
+	/**
+	 * @param $view
+	 * @param array $params
+	 * @param null $viewsDir
+	 *
+	 * @return Message
+	 */
+	public function createMessageViaView($view, $params = [], $viewsDir = null)
 	{
 		$message = $this->createMessage();
-		$message->content($this->renderView($view, $params), 'text/html');
+		$message->content($this->renderView($view, $params, $viewsDir), 'text/html');
 
 
 		return $message;
@@ -71,74 +95,71 @@ class Mailer extends Component
 	}
 
 
+	/**
+	 * Register SwiftMailer
+	 */
 	protected function registerSwiftMailer()
 	{
-		$this->getDI()->set('swift.mailer', function()
-		{
-			$this->registerSwiftTransport();
-			return new \Swift_Mailer($this->di['swift.transport']);
-
-		}, true);
+		$this->mailer = new \Swift_Mailer($this->transport);
 	}
 
 
 	protected function registerSwiftTransport()
 	{
-		switch($this->getConfig('driver'))
+		switch($driver = $this->getConfig('driver'))
 		{
 			case 'smtp':
-				$this->registerTransportSmtp();
+				$this->transport = $this->registerTransportSmtp();
 			break;
 
 			case 'mail':
-				$this->registerTransportMail();
+				$this->transport = $this->registerTransportMail();
 			break;
 
 			case 'sendmail':
-				$this->registerTransportSendmail();
+				$this->transport = $this->registerTransportSendmail();
 			break;
+
+			default:
+				throw new \InvalidArgumentException(sprintf('Driver-mail "%s" is not supported', $driver));
 		}
 	}
 
+	/**
+	 * @return \Swift_SmtpTransport
+	 */
 	protected function registerTransportSmtp()
 	{
-		$this->getDI()->set('swift.transport', function()
+		$config = $this->getConfig();
+
+		$transport = \Swift_SmtpTransport::newInstance($config['host'], $config['port']);
+
+		if(isset($config['encryption']))
+			$transport->setEncryption($config['encryption']);
+
+		if(isset($config['username']))
 		{
-			$config = $this->getConfig();
+			$transport->setUsername($config['username']);
+			$transport->setPassword($config['password']);
+		}
 
-			$transport = \Swift_SmtpTransport::newInstance($config['host'], $config['port']);
-
-			if($config['encryption'])
-				$transport->setEncryption($config['encryption']);
-
-
-			if($config['username'])
-			{
-				$transport->setUsername($config['username']);
-				$transport->setPassword($config['password']);
-			}
-
-			return $transport;
-
-		}, true);
+		return $transport;
 	}
 
+	/**
+	 * @return \Swift_SendmailTransport
+	 */
 	protected function registerTransportSendmail()
 	{
-		$this->getDI()->set('swift.transport', function()
-		{
-			return \Swift_SendmailTransport::newInstance($this->getConfig('sendmail', '/usr/sbin/sendmail -bs'));
-
-		}, true);
-
+		return \Swift_SendmailTransport::newInstance($this->getConfig('sendmail', '/usr/sbin/sendmail -bs'));
 	}
 
+	/**
+	 * @return \Swift_MailTransport
+	 */
 	protected function registerTransportMail()
 	{
-		$this->getDI()->set('swift.transport', function()
-		{
-			return \Swift_MailTransport::newInstance();
-		});
+		return \Swift_MailTransport::newInstance();
 	}
 
 	/**
@@ -146,10 +167,10 @@ class Mailer extends Component
 	 */
 	protected function configure(Array $config)
 	{
-		if($config === null)
-			$this->config = (array)$this->getDI()->get('config')->mail->toArray();
-		else
-			$this->config = $config;
+		$this->config = $config;
+
+		$this->registerSwiftTransport();
+		$this->registerSwiftMailer();
 	}
 
 	/**
@@ -172,27 +193,44 @@ class Mailer extends Component
 	}
 
 	/**
-	 * @param $view
+	 * @param $viewPath
 	 * @param $params
+	 * @param null $viewsDir
 	 *
 	 * @return string
 	 */
-	protected function renderView($view, $params)
+	protected function renderView($viewPath, $params, $viewsDir = null)
 	{
-		ob_start();
-		$this->getView()->partial($view, $params);
+		$view = $this->getView();
 
-		$content = ob_get_contents();
-		ob_end_clean();
+		if($viewsDir !== null)
+		{
+			$viewsDirOld = $view->getViewsDir();
+			$view->setViewsDir($viewsDir);
 
-		return $content;
+			$content = $view->render($viewPath, $params);
+			$view->setViewsDir($viewsDirOld);
+
+			return $content;
+		}
+		else
+			return $view->render($viewPath, $params);
 	}
 
 	/**
-	 * @return View
+	 * @return View\Simple
 	 */
 	protected function getView()
 	{
-		return $this->getDI()->get('view');
+		if($this->view)
+			return $this->view;
+		else
+		{
+			/** @var $view \Phalcon\Mvc\View\Simple */
+			$view = $this->getDI()->get('\Phalcon\View\Simple');
+			$view->setViewsDir($this->getConfig('viewsDir'));
+
+			return $this->view = $view;
+		}
 	}
 } 
