@@ -185,6 +185,65 @@ class Message
 		return $this;
 	}
 
+
+	/**
+	 * Attach a file to the message.
+	 *
+	 * @param  string  $file
+	 * @param  array   $options
+	 *
+	 * @return Message
+	 */
+	public function attachment($file, Array $options = [])
+	{
+		$attachment = $this->createAttachmentViaPath($file);
+		return $this->prepareAttachment($attachment, $options);
+	}
+
+	/**
+	 * Attach in-memory data as an attachment.
+	 *
+	 * @param  string  $data
+	 * @param  string  $name
+	 * @param  array   $options
+	 *
+	 * @return Message
+	 */
+	public function attachData($data, $name, Array $options = [])
+	{
+		$attachment = $this->createAttachmentViaData($data, $name);
+		return $this->prepareAttachment($attachment, $options);
+	}
+
+	/**
+	 * Embed a file in the message and get the CID.
+	 *
+	 * @param  string  $file
+	 *
+	 * @return string
+	 */
+	public function embed($file)
+	{
+		$embed = $this->createEmbedViaPath($file);
+		return $this->getMessage()->embed($embed);
+	}
+
+	/**
+	 * Embed in-memory data in the message and get the CID.
+	 *
+	 * @param  string  $data
+	 * @param  string  $name
+	 * @param  string  $contentType
+	 *
+	 * @return string
+	 */
+	public function embedData($data, $name, $contentType = null)
+	{
+		$embed = $this->createEmbedViaData($data, $name, $contentType);
+		return $this->getMessage()->embed($embed);
+	}
+
+
 	/**
 	 * @return bool
 	 */
@@ -211,6 +270,16 @@ class Message
 			return false;
 	}
 
+	/**
+	 * @return \Swift_Message
+	 */
+	public function getMessage()
+	{
+		if(!$this->message)
+			$this->message = $this->getSwift()->createMessage();
+
+		return $this->message;
+	}
 
 	/**
 	 * @return \Swift_Mailer
@@ -221,13 +290,84 @@ class Message
 	}
 
 	/**
-	 * @return \Swift_Message
+	 * Prepare and attach the given attachment.
+	 *
+	 * @param  \Swift_Attachment  $attachment
+	 * @param  array  $options
+	 *
+	 * @return Message
 	 */
-	protected function getMessage()
+	protected function prepareAttachment(\Swift_Attachment $attachment, Array $options = [])
 	{
-		if(!$this->message)
-			$this->message = $this->getSwift()->createMessage();
+		if(isset($options['mime']))
+			$attachment->setContentType($options['mime']);
 
-		return $this->message;
+		if(isset($options['as']))
+			$attachment->setFilename($options['as']);
+
+		$eventManager = $this->mailer->getEventsManager();
+
+		if($eventManager)
+			$result = $eventManager->fire('mailer:beforeAttachFile', $this, [$attachment]);
+		else
+			$result = true;
+
+		if($result)
+		{
+			$this->getMessage()->attach($attachment);
+
+			if($eventManager)
+				$eventManager->fire('mailer:afterAttachFile', $this, [$attachment]);
+		}
+
+		return $this;
+	}
+
+	/**
+	 * Create a Swift Attachment instance.
+	 *
+	 * @param  string  $file
+	 *
+	 * @return \Swift_Attachment
+	 */
+	protected function createAttachmentViaPath($file)
+	{
+		return \Swift_Attachment::fromPath($file);
+	}
+
+	/**
+	 * Create a Swift Attachment instance from data.
+	 *
+	 * @param  string  $data
+	 * @param  string  $name
+	 *
+	 * @return \Swift_Attachment
+	 */
+	protected function createAttachmentViaData($data, $name)
+	{
+		return \Swift_Attachment::newInstance($data, $name);
+	}
+
+
+	/**
+	 * @param $file
+	 *
+	 * @return \Swift_Image
+	 */
+	protected function createEmbedViaPath($file)
+	{
+		return \Swift_Image::fromPath($file);
+	}
+
+	/**
+	 * @param $data
+	 * @param $name
+	 * @param null $contentType
+	 *
+	 * @return \Swift_Image
+	 */
+	protected function createEmbedViaData($data, $name, $contentType = null)
+	{
+		return \Swift_Image::newInstance($data, $name, $contentType);
 	}
 } 
