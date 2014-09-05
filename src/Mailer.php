@@ -94,6 +94,22 @@ class Mailer extends Component
 		return $message;
 	}
 
+	/**
+	 * @param $email
+	 *
+	 * @return string
+	 */
+	public function normalizeEmail($email)
+	{
+		if(preg_match('#[^(\x20-\x7F)]+#', $email))
+		{
+			list($user, $domain) = explode('@', $email);
+			return $user . '@' . $this->punycode($domain);
+		}
+		else
+			return $email;
+	}
+
 
 	/**
 	 * Register SwiftMailer
@@ -139,7 +155,7 @@ class Mailer extends Component
 
 		if(isset($config['username']))
 		{
-			$transport->setUsername($config['username']);
+			$transport->setUsername($this->normalizeEmail($config['username']));
 			$transport->setPassword($config['password']);
 		}
 
@@ -232,5 +248,20 @@ class Mailer extends Component
 
 			return $this->view = $view;
 		}
+	}
+
+	/**
+	 * Convert UTF-8 encoded domain name to ASCII
+	 *
+	 * @param $str
+	 *
+	 * @return string
+	 */
+	protected function punycode($str)
+	{
+		if(function_exists('idn_to_ascii'))
+			return idn_to_ascii($str);
+		else
+			return $str;
 	}
 } 
