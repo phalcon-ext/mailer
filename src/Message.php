@@ -52,7 +52,12 @@ class Message
 	 */
 	public function from($email, $name = null)
 	{
-		$this->getMessage()->addFrom($email, $name);
+		$email = $this->normalizeEmail($email);
+
+		if(is_array($email))
+			$this->getMessage()->setFrom($email);
+		else
+			$this->getMessage()->addFrom($email, $name);
 
 		return $this;
 	}
@@ -65,7 +70,12 @@ class Message
 	 */
 	public function replyTo($email, $name = null)
 	{
-		$this->getMessage()->addReplyTo($email, $name);
+		$email = $this->normalizeEmail($email);
+
+		if(is_array($email))
+			$this->getMessage()->setReplyTo($email);
+		else
+			$this->getMessage()->addReplyTo($email, $name);
 
 		return $this;
 	}
@@ -78,7 +88,12 @@ class Message
 	 */
 	public function to($email, $name = null)
 	{
-		$this->getMessage()->addTo($email, $name);
+		$email = $this->normalizeEmail($email);
+
+		if(is_array($email))
+			$this->getMessage()->setTo($email);
+		else
+			$this->getMessage()->addTo($email, $name);
 
 		return $this;
 	}
@@ -92,7 +107,12 @@ class Message
 	 */
 	public function cc($email, $name = null)
 	{
-		$this->getMessage()->addCc($email, $name);
+		$email = $this->normalizeEmail($email);
+
+		if(is_array($email))
+			$this->getMessage()->setCc($email);
+		else
+			$this->getMessage()->addCc($email, $name);
 
 		return $this;
 	}
@@ -105,7 +125,12 @@ class Message
 	 */
 	public function bcc($email, $name = null)
 	{
-		$this->getMessage()->addBcc($email, $name);
+		$email = $this->normalizeEmail($email);
+
+		if(is_array($email))
+			$this->getMessage()->setBcc($email);
+		else
+			$this->getMessage()->addBcc($email, $name);
 
 		return $this;
 	}
@@ -118,6 +143,7 @@ class Message
 	 */
 	public function sender($email, $name = null)
 	{
+		$email = $this->normalizeEmail($email);
 		$this->getMessage()->setSender($email, $name);
 
 		return $this;
@@ -136,6 +162,14 @@ class Message
 	}
 
 	/**
+	 * @return string
+	 */
+	public function getSubject()
+	{
+		return $this->getMessage()->getSubject();
+	}
+
+	/**
 	 * @param $content
 	 * @param null $contentType
 	 * @param null $charset
@@ -147,6 +181,14 @@ class Message
 		$this->getMessage()->setBody($content, $contentType, $charset);
 
 		return $this;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getContent()
+	{
+		return $this->getMessage()->getBody();
 	}
 
 	/**
@@ -162,6 +204,14 @@ class Message
 	}
 
 	/**
+	 * @return string
+	 */
+	public function getContentType()
+	{
+		return $this->getMessage()->getContentType();
+	}
+
+	/**
 	 * @param $charset
 	 *
 	 * @return $this
@@ -174,6 +224,14 @@ class Message
 	}
 
 	/**
+	 * @return string
+	 */
+	public function getCharset()
+	{
+		return $this->getMessage()->getCharset();
+	}
+
+	/**
 	 * @param $priority
 	 *
 	 * @return $this
@@ -183,6 +241,14 @@ class Message
 		$this->getMessage()->setPriority($priority);
 
 		return $this;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getPriority()
+	{
+		return $this->getMessage()->getPriority();
 	}
 
 
@@ -243,7 +309,6 @@ class Message
 		return $this->getMessage()->embed($embed);
 	}
 
-
 	/**
 	 * @return bool
 	 */
@@ -262,12 +327,68 @@ class Message
 			$result = $this->getSwift()->send($this->getMessage(), $this->failedRecipients);
 
 			if($eventManager)
-				$eventManager->fire('mailer:afterSend', $this);
+				$eventManager->fire('mailer:afterSend', $this, [$this->failedRecipients]);
 
 			return (bool)$result;
 		}
 		else
 			return false;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getFailedRecipients()
+	{
+		return $this->failedRecipients;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getTo()
+	{
+		return $this->getMessage()->getTo();
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getFrom()
+	{
+		return $this->getMessage()->getFrom();
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getSender()
+	{
+		return $this->getMessage()->getSender();
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getReplyTo()
+	{
+		return $this->getMessage()->getReplyTo();
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getBcc()
+	{
+		return $this->getMessage()->getBcc();
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getCc()
+	{
+		return $this->getMessage()->getCc();
 	}
 
 	/**
@@ -369,5 +490,33 @@ class Message
 	protected function createEmbedViaData($data, $name, $contentType = null)
 	{
 		return \Swift_Image::newInstance($data, $name, $contentType);
+	}
+
+	/**
+	 * @param $email
+	 *
+	 * @return array|string
+	 */
+	protected function normalizeEmail($email)
+	{
+		if(is_array($email))
+		{
+			$emails = [];
+
+			foreach($email as $k => $v)
+			{
+				if(is_int($k))
+					$emails[$k] = $this->mailer->normalizeEmail($v);
+				else
+				{
+					$k = $this->mailer->normalizeEmail($k);
+					$emails[$k] = $v;
+				}
+			}
+
+			return $emails;
+		}
+		else
+			return $this->mailer->normalizeEmail($email);
 	}
 } 
