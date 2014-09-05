@@ -2,7 +2,7 @@
 /**
  * Message.php 2014-08-31 04:50
  * ----------------------------------------------
- * 
+ *
  *
  * @author      Stanislav Kiryukhin <korsar.zn@gmail.com>
  * @copyright   Copyright (c) 2014, CKGroup.ru
@@ -21,6 +21,17 @@ namespace sKSoft\Phalcon\Mailer;
  */
 class Message
 {
+
+	/**
+	 *  content type PLAIN
+	 */
+	const CONTENT_TYPE_PLAIN = 'text/plain';
+
+	/**
+	 *  content type HTML
+	 */
+	const CONTENT_TYPE_HTML  = 'text/html';
+
 	/**
 	 * @var Mailer
 	 */
@@ -171,12 +182,12 @@ class Message
 
 	/**
 	 * @param $content
-	 * @param null $contentType
+	 * @param string $contentType
 	 * @param null $charset
 	 *
 	 * @return $this
 	 */
-	public function content($content, $contentType = null, $charset = null)
+	public function content($content, $contentType = self::CONTENT_TYPE_HTML, $charset = null)
 	{
 		$this->getMessage()->setBody($content, $contentType, $charset);
 
@@ -321,7 +332,7 @@ class Message
 		else
 			$result = true;
 
-		if($result)
+		if($result !== false)
 		{
 			$this->failedRecipients = [];
 			$result = $this->getSwift()->send($this->getMessage(), $this->failedRecipients);
