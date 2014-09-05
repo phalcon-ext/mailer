@@ -2,7 +2,7 @@
 /**
  * MailerService.php 2014-08-31 04:11
  * ----------------------------------------------
- * 
+ *
  *
  * @author      Stanislav Kiryukhin <korsar.zn@gmail.com>
  * @copyright   Copyright (c) 2014, CKGroup.ru
@@ -86,7 +86,11 @@ class Mailer extends Component
 		if($eventsManager)
 			$eventsManager->fire('mailer:beforeCreateMessage', $this);
 
+		/** @var $message Message */
 		$message = $this->getDI()->get('\sKSoft\Phalcon\Mailer\Message', [$this]);
+
+		if(($from = $this->getConfig('from')))
+			$message->from($from['email'], isset($from['name']) ? $from['name'] : null);
 
 		if($eventsManager)
 			$eventsManager->fire('mailer:afterCreateMessage', $this, [$message]);
