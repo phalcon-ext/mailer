@@ -21,7 +21,7 @@
 	"autoload": {
 
 		"psr-4": {
-			"sKSoft\\Phalcon\\Mailer\\": "src/"
+			"Phalcon\\Mailer\\": "src/"
 		}
 	}
 }

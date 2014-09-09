@@ -12,7 +12,7 @@
  * All Rights Reserved.
  * ----------------------------------------------
  */
-namespace sKSoft\Phalcon\Mailer;
+namespace Phalcon\Mailer;
 
 use Phalcon\Mvc\User\Component;
 use Phalcon\Mvc\View;
@@ -20,7 +20,7 @@ use Phalcon\Config;
 
 /**
  * Class Mailer
- * @package sKSoft\Phalcon\Mailer
+ * @package Phalcon\Mailer
  */
 class Mailer extends Component
 {
@@ -77,7 +77,7 @@ class Mailer extends Component
 	}
 
 	/**
-	 * @return \sKSoft\Phalcon\Mailer\Message
+	 * @return \Phalcon\Mailer\Message
 	 */
 	public function createMessage()
 	{
@@ -87,7 +87,7 @@ class Mailer extends Component
 			$eventsManager->fire('mailer:beforeCreateMessage', $this);
 
 		/** @var $message Message */
-		$message = $this->getDI()->get('\sKSoft\Phalcon\Mailer\Message', [$this]);
+		$message = $this->getDI()->get('\Phalcon\Mailer\Message', [$this]);
 
 		if(($from = $this->getConfig('from')))
 			$message->from($from['email'], isset($from['name']) ? $from['name'] : null);

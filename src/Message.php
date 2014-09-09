@@ -12,12 +12,12 @@
  * All Rights Reserved.
  * ----------------------------------------------
  */
-namespace sKSoft\Phalcon\Mailer;
+namespace Phalcon\Mailer;
 
 
 /**
  * Class Message
- * @package sKSoft\Phalcon\Mailer
+ * @package Phalcon\Mailer
  */
 class Message
 {
