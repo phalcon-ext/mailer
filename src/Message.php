@@ -286,7 +286,7 @@ class Message
 	 *
 	 * @return Message
 	 */
-	public function attachData($data, $name, Array $options = [])
+	public function attachmentData($data, $name, Array $options = [])
 	{
 		$attachment = $this->createAttachmentViaData($data, $name);
 		return $this->prepareAttachment($attachment, $options);
