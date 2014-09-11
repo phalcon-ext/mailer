@@ -67,11 +67,10 @@ class Mailer extends Component
 	 *
 	 * @return Message
 	 */
-	public function createMessageViaView($view, $params = [], $viewsDir = null)
+	public function createMessageFromView($view, $params = [], $viewsDir = null)
 	{
 		$message = $this->createMessage();
-		$message->content($this->renderView($view, $params, $viewsDir), 'text/html');
-
+		$message->content($this->renderView($view, $params, $viewsDir), $message::CONTENT_TYPE_HTML);
 
 		return $message;
 	}
@@ -246,9 +245,12 @@ class Mailer extends Component
 			return $this->view;
 		else
 		{
+			if(!($viewsDir = $this->getConfig('viewsDir')))
+				$viewsDir = $this->getDI()->get('view')->getViewsDir();
+
 			/** @var $view \Phalcon\Mvc\View\Simple */
 			$view = $this->getDI()->get('\Phalcon\View\Simple');
-			$view->setViewsDir($this->getConfig('viewsDir'));
+			$view->setViewsDir($viewsDir);
 
 			return $this->view = $view;
 		}
