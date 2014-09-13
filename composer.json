@@ -1,9 +1,11 @@
 {
 	"name": "sksoft/phalcon-mailer",
-
-	"description": "description_text",
+    "type": "library",
+	"description": "Mailer component as wrapper over SwiftMailer for Phalcon.",
+    "keywords": ["mailer", "phalcon"],
 	"minimum-stability": "stable",
-	"license": "proprietary",
+	"license": "LGPL",
+
 
 	"authors": [
 		{
