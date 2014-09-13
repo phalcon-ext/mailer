@@ -1,29 +1,29 @@
 {
-	"name": "sksoft/phalcon-mailer",
+    "name": "sksoft/phalcon-mailer",
     "type": "library",
-	"description": "Mailer component as wrapper over SwiftMailer for Phalcon.",
+    "description": "Mailer component as wrapper over SwiftMailer for Phalcon.",
     "keywords": ["mailer", "phalcon"],
-	"minimum-stability": "stable",
-	"license": "LGPL",
+    "minimum-stability": "stable",
+    "license": "LGPL",
 
 
-	"authors": [
-		{
-			"name": "Stanislav Kiryukhin",
-			"email": "korsar.zn@gmail.com",
-			"role": "Founder and project lead"
-		}
-	],
+    "authors": [
+        {
+            "name": "Stanislav Kiryukhin",
+            "email": "korsar.zn@gmail.com",
+            "role": "Founder and project lead"
+        }
+    ],
 
-	"require": {
-		"php": ">=5.4.0",
-		"swiftmailer/swiftmailer": "5.1.*@dev"
-	},
+    "require": {
+        "php": ">=5.4.0",
+        "swiftmailer/swiftmailer": "5.1.*@dev"
+    },
 
-	"autoload": {
+    "autoload": {
 
-		"psr-4": {
-			"Phalcon\\Mailer\\": "src/"
-		}
-	}
+        "psr-4": {
+            "Phalcon\\Mailer\\": "src/"
+        }
+    }
 }
