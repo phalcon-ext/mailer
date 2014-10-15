@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v1.1.0 (2014-10-16)
+- added method `getSwiftMessage()` in class `\Phalcon\Mailer\Message` analogue for `getMessage()`
+- method `getMessage()` in class `\Phalcon\Mailer\Message` is deprecated (will removed since 2.0.0)
+
 ## v1.0.2 (2014-09-17)
 - fixed bug when you create a message via View (incorrect namespace)
 

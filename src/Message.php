@@ -7,7 +7,6 @@
  * @author      Stanislav Kiryukhin <korsar.zn@gmail.com>
  * @copyright   Copyright (c) 2014, CKGroup.ru
  *
- * @version     0.0.1
  * ----------------------------------------------
  * All Rights Reserved.
  * ----------------------------------------------
@@ -39,7 +38,7 @@ class Message
     /**
      * @var \Swift_Message
      */
-    protected $message;
+    protected $swiftMessage;
 
     /**
      * An array of email which failed send to recipients.
@@ -77,7 +76,7 @@ class Message
     public function from($email, $name = null)
     {
         $email = $this->normalizeEmail($email);
-        $this->getMessage()->setFrom($email, $name);
+        $this->getSwiftMessage()->setFrom($email, $name);
 
         return $this;
     }
@@ -91,7 +90,7 @@ class Message
      */
     public function getFrom()
     {
-        return $this->getMessage()->getFrom();
+        return $this->getSwiftMessage()->getFrom();
     }
 
     /**
@@ -113,7 +112,7 @@ class Message
     public function replyTo($email, $name = null)
     {
         $email = $this->normalizeEmail($email);
-        $this->getMessage()->setReplyTo($email, $name);
+        $this->getSwiftMessage()->setReplyTo($email, $name);
 
         return $this;
     }
@@ -127,7 +126,7 @@ class Message
      */
     public function getReplyTo()
     {
-        return $this->getMessage()->getReplyTo();
+        return $this->getSwiftMessage()->getReplyTo();
     }
 
     /**
@@ -149,7 +148,7 @@ class Message
     public function to($email, $name = null)
     {
         $email = $this->normalizeEmail($email);
-        $this->getMessage()->setTo($email, $name);
+        $this->getSwiftMessage()->setTo($email, $name);
 
         return $this;
     }
@@ -163,7 +162,7 @@ class Message
      */
     public function getTo()
     {
-        return $this->getMessage()->getTo();
+        return $this->getSwiftMessage()->getTo();
     }
 
     /**
@@ -185,7 +184,7 @@ class Message
     public function cc($email, $name = null)
     {
         $email = $this->normalizeEmail($email);
-        $this->getMessage()->setCc($email, $name);
+        $this->getSwiftMessage()->setCc($email, $name);
 
         return $this;
     }
@@ -199,7 +198,7 @@ class Message
      */
     public function getCc()
     {
-        return $this->getMessage()->getCc();
+        return $this->getSwiftMessage()->getCc();
     }
 
     /**
@@ -221,7 +220,7 @@ class Message
     public function bcc($email, $name = null)
     {
         $email = $this->normalizeEmail($email);
-        $this->getMessage()->setBcc($email, $name);
+        $this->getSwiftMessage()->setBcc($email, $name);
 
         return $this;
     }
@@ -235,7 +234,7 @@ class Message
      */
     public function getBcc()
     {
-        return $this->getMessage()->getBcc();
+        return $this->getSwiftMessage()->getBcc();
     }
 
     /**
@@ -253,7 +252,7 @@ class Message
     public function sender($email, $name = null)
     {
         $email = $this->normalizeEmail($email);
-        $this->getMessage()->setSender($email, $name);
+        $this->getSwiftMessage()->setSender($email, $name);
 
         return $this;
     }
@@ -267,7 +266,7 @@ class Message
      */
     public function getSender()
     {
-        return $this->getMessage()->getSender();
+        return $this->getSwiftMessage()->getSender();
     }
 
     /**
@@ -281,7 +280,7 @@ class Message
      */
     public function subject($subject)
     {
-        $this->getMessage()->setSubject($subject);
+        $this->getSwiftMessage()->setSubject($subject);
 
         return $this;
     }
@@ -295,7 +294,7 @@ class Message
      */
     public function getSubject()
     {
-        return $this->getMessage()->getSubject();
+        return $this->getSwiftMessage()->getSubject();
     }
 
     /**
@@ -312,7 +311,7 @@ class Message
      */
     public function content($content, $contentType = self::CONTENT_TYPE_HTML, $charset = null)
     {
-        $this->getMessage()->setBody($content, $contentType, $charset);
+        $this->getSwiftMessage()->setBody($content, $contentType, $charset);
 
         return $this;
     }
@@ -326,7 +325,7 @@ class Message
      */
     public function getContent()
     {
-        return $this->getMessage()->getBody();
+        return $this->getSwiftMessage()->getBody();
     }
 
     /**
@@ -340,7 +339,7 @@ class Message
      */
     public function contentType($contentType)
     {
-        $this->getMessage()->setContentType($contentType);
+        $this->getSwiftMessage()->setContentType($contentType);
 
         return $this;
     }
@@ -354,7 +353,7 @@ class Message
      */
     public function getContentType()
     {
-        return $this->getMessage()->getContentType();
+        return $this->getSwiftMessage()->getContentType();
     }
 
     /**
@@ -368,7 +367,7 @@ class Message
      */
     public function charset($charset)
     {
-        $this->getMessage()->setCharset($charset);
+        $this->getSwiftMessage()->setCharset($charset);
 
         return $this;
     }
@@ -382,7 +381,7 @@ class Message
      */
     public function getCharset()
     {
-        return $this->getMessage()->getCharset();
+        return $this->getSwiftMessage()->getCharset();
     }
 
     /**
@@ -398,7 +397,7 @@ class Message
      */
     public function priority($priority)
     {
-        $this->getMessage()->setPriority($priority);
+        $this->getSwiftMessage()->setPriority($priority);
 
         return $this;
     }
@@ -415,7 +414,7 @@ class Message
      */
     public function getPriority()
     {
-        return $this->getMessage()->getPriority();
+        return $this->getSwiftMessage()->getPriority();
     }
 
     /**
@@ -430,7 +429,7 @@ class Message
     public function setReadReceiptTo($email)
     {
         $email = $this->normalizeEmail($email);
-        $this->getMessage()->setReadReceiptTo($email);
+        $this->getSwiftMessage()->setReadReceiptTo($email);
 
         return $this;
     }
@@ -454,7 +453,7 @@ class Message
      */
     public function getReadReceiptTo()
     {
-        return $this->getMessage()->getReadReceiptTo();
+        return $this->getSwiftMessage()->getReadReceiptTo();
     }
 
     /**
@@ -468,7 +467,7 @@ class Message
      */
     public function setReturnPath($email)
     {
-        $this->getMessage()->setReturnPath($email);
+        $this->getSwiftMessage()->setReturnPath($email);
 
         return $this;
     }
@@ -482,7 +481,7 @@ class Message
      */
     public function getReturnPath()
     {
-        return $this->getMessage()->getReturnPath();
+        return $this->getSwiftMessage()->getReturnPath();
     }
 
     /**
@@ -496,7 +495,7 @@ class Message
      */
     public function setFormat($format)
     {
-        $this->getMessage()->setFormat($format);
+        $this->getSwiftMessage()->setFormat($format);
 
         return $this;
     }
@@ -510,7 +509,7 @@ class Message
      */
     public function getFormat()
     {
-        return $this->getMessage()->getFormat();
+        return $this->getSwiftMessage()->getFormat();
     }
 
     /**
@@ -562,7 +561,7 @@ class Message
     public function embed($file)
     {
         $embed = $this->createEmbedViaPath($file);
-        return $this->getMessage()->embed($embed);
+        return $this->getSwiftMessage()->embed($embed);
     }
 
     /**
@@ -577,7 +576,20 @@ class Message
     public function embedData($data, $name, $contentType = null)
     {
         $embed = $this->createEmbedViaData($data, $name, $contentType);
-        return $this->getMessage()->embed($embed);
+        return $this->getSwiftMessage()->embed($embed);
+    }
+
+    /**
+     * Return a {@link \Swift_Message} instance
+     *
+     * @deprecated 1.2.0 rename to getSwiftMessage
+     * @see Phalcon\Mailer\Message::getSwiftMessage()
+     *
+     * @return \Swift_Message
+     */
+    public function getMessage()
+    {
+        return $this->getSwiftMessage();
     }
 
     /**
@@ -585,13 +597,13 @@ class Message
      *
      * @return \Swift_Message
      */
-    public function getMessage()
+    public function getSwiftMessage()
     {
-        if (!$this->message) {
-            $this->message = $this->getManager()->getSwift()->createMessage();
+        if (!$this->swiftMessage) {
+            $this->swiftMessage = $this->getManager()->getSwift()->createMessage();
         }
 
-        return $this->message;
+        return $this->swiftMessage;
     }
 
     /**
@@ -637,7 +649,7 @@ class Message
 
             $this->failedRecipients = [];
 
-            $count = $this->getManager()->getSwift()->send($this->getMessage(), $this->failedRecipients);
+            $count = $this->getManager()->getSwift()->send($this->getSwiftMessage(), $this->failedRecipients);
 
             if ($eventManager) {
                 $eventManager->fire('mailer:afterSend', $this, [$count, $this->failedRecipients]);
@@ -679,7 +691,7 @@ class Message
         }
 
         if ($result !== false) {
-            $this->getMessage()->attach($attachment);
+            $this->getSwiftMessage()->attach($attachment);
 
             if ($eventManager) {
                 $eventManager->fire('mailer:afterAttachFile', $this, [$attachment]);
