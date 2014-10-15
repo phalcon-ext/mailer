@@ -11,12 +11,11 @@
  * All Rights Reserved.
  * ----------------------------------------------
  */
-namespace Phalcon\Mailer;
+namespace Phalcon\Ext\Mailer;
 
 /**
  * Class Message
- *
- * @package Phalcon\Mailer
+ * @package Phalcon\Ext\Mailer
  */
 class Message
 {
@@ -31,7 +30,7 @@ class Message
     const CONTENT_TYPE_HTML = 'text/html';
 
     /**
-     * @var \Phalcon\Mailer\Manager
+     * @var \Phalcon\Ext\Mailer\Manager
      */
     protected $manager;
 
@@ -524,8 +523,8 @@ class Message
      *
      * @return $this
      *
-     * @see Phalcon\Mailer\Message::createAttachmentViaPath()
-     * @see Phalcon\Mailer\Message::prepareAttachment()
+     * @see Phalcon\Ext\Mailer\Message::createAttachmentViaPath()
+     * @see Phalcon\Ext\Mailer\Message::prepareAttachment()
      */
     public function attachment($file, Array $options = [])
     {
@@ -542,8 +541,8 @@ class Message
      *
      * @return Message
      *
-     * @see Phalcon\Mailer\Message::createAttachmentViaData()
-     * @see Phalcon\Mailer\Message::prepareAttachment()
+     * @see Phalcon\Ext\Mailer\Message::createAttachmentViaData()
+     * @see Phalcon\Ext\Mailer\Message::prepareAttachment()
      */
     public function attachmentData($data, $name, Array $options = [])
     {
@@ -582,19 +581,6 @@ class Message
     /**
      * Return a {@link \Swift_Message} instance
      *
-     * @deprecated 1.2.0 rename to getSwiftMessage
-     * @see Phalcon\Mailer\Message::getSwiftMessage()
-     *
-     * @return \Swift_Message
-     */
-    public function getMessage()
-    {
-        return $this->getSwiftMessage();
-    }
-
-    /**
-     * Return a {@link \Swift_Message} instance
-     *
      * @return \Swift_Message
      */
     public function getSwiftMessage()
@@ -607,9 +593,9 @@ class Message
     }
 
     /**
-     * Return a {@link \Phalcon\Mailer\Manager} instance
+     * Return a {@link \Phalcon\Ext\Mailer\Manager} instance
      *
-     * @return \Phalcon\Mailer\Manager
+     * @return \Phalcon\Ext\Mailer\Manager
      */
     public function getManager()
     {

@@ -1,8 +1,8 @@
 {
-    "name": "sksoft/phalcon-mailer",
+    "name": "phalcon-ext/mailer",
     "type": "library",
     "description": "Mailer component as wrapper over SwiftMailer for Phalcon.",
-    "keywords": ["mailer", "phalcon"],
+    "keywords": ["mailer", "phalcon", "phalcon-ext"],
     "minimum-stability": "stable",
     "license": "LGPL",
 
@@ -17,13 +17,12 @@
 
     "require": {
         "php": ">=5.4.0",
-        "swiftmailer/swiftmailer": "~5.2"
+        "swiftmailer/swiftmailer": "~5.3"
     },
 
     "autoload": {
-
         "psr-4": {
-            "Phalcon\\Mailer\\": "src/"
+            "Phalcon\\Ext\\Mailer\\": "src/"
         }
     }
 }

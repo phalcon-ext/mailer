@@ -1,4 +1,4 @@
-Phalcon\Mailer
+Phalcon\Ext\Mailer
 ==============
 
 Mailer wrapper over SwiftMailer for Phalcon.
@@ -10,20 +10,9 @@ Install composer in a common location or in your project:
     curl -s http://getcomposer.org/installer | php
 
 Create the composer.json file as follows:
-
-*Install all Phalcon\Incubator*
-
 	{
 		"require": {
-			"phalcon/incubator": "dev-master"
-		}
-	}
-
-*Install only mailer component*
-
-	{
-		"require": {
-			"sksoft/phalcon-mailer": "~1.0"
+			"phalcon-ext/mailer": "~2.0"
 		}
 	}
 
@@ -79,7 +68,7 @@ Add in your the code
 
 ### createMessage() ###
 
-	$mailer = new \Phalcon\Mailer\Manager($config);
+	$mailer = new \Phalcon\Ext\Mailer\Manager($config);
 	
 	$message = $mailer->createMessage()
 			->to('example_to@gmail.com', 'OPTIONAL NAME')
@@ -105,7 +94,7 @@ Add in your the code
      */
 	$config['viewsDir'] = __DIR__ . '/views/email/';
 
-	$mailer = new \Phalcon\Mailer\Manager($config);
+	$mailer = new \Phalcon\Ext\Mailer\Manager($config);
 
 	// view relative to the folder viewsDir (REQUIRED)
 	$viewPath = 'email/example_message';

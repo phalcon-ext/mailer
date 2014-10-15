@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v2.0.0 (2014-10-16)
+- rename root namespace `\Phalcon\Mailer` to `\Phalcon\Ext\Mailer`
+- remove deprecated method `getMessage()` in class `\Phalcon\Ext\Mailer\Message`
+
 ## v1.1.0 (2014-10-16)
 - added method `getSwiftMessage()` in class `\Phalcon\Mailer\Message` analogue for `getMessage()`
 - method `getMessage()` in class `\Phalcon\Mailer\Message` is deprecated (will removed since 2.0.0)

@@ -12,7 +12,7 @@
  * All Rights Reserved.
  * ----------------------------------------------
  */
-namespace Phalcon\Mailer;
+namespace Phalcon\Ext\Mailer;
 
 use Phalcon\Config;
 use Phalcon\Mvc\User\Component;
@@ -20,7 +20,7 @@ use Phalcon\Mvc\View;
 
 /**
  * Class Manager
- * @package Phalcon\Manager
+ * @package Phalcon\Ext\Mailer
  */
 class Manager extends Component
 {
@@ -61,7 +61,7 @@ class Manager extends Component
      * - mailer:beforeCreateMessage
      * - mailer:afterCreateMessage
      *
-     * @return \Phalcon\Mailer\Message
+     * @return \Phalcon\Ext\Mailer\Message
      */
     public function createMessage()
     {
@@ -72,7 +72,7 @@ class Manager extends Component
         }
 
         /** @var $message Message */
-        $message = $this->getDI()->get('\Phalcon\Mailer\Message', [$this]);
+        $message = $this->getDI()->get('\Phalcon\Ext\Mailer\Message', [$this]);
 
         if (($from = $this->getConfig('from'))) {
             $message->from($from['email'], isset($from['name']) ? $from['name'] : null);
@@ -97,9 +97,9 @@ class Manager extends Component
      * @param array $params         optional
      * @param null|string $viewsDir optional
      *
-     * @return \Phalcon\Mailer\Message
+     * @return \Phalcon\Ext\Mailer\Message
      *
-     * @see \Phalcon\Mailer\Manager::createMessage()
+     * @see \Phalcon\Ext\Mailer\Manager::createMessage()
      */
     public function createMessageFromView($view, $params = [], $viewsDir = null)
     {
@@ -126,7 +126,7 @@ class Manager extends Component
      *
      * @return string
      *
-     * @see \Phalcon\Mailer\Manager::punycode()
+     * @see \Phalcon\Ext\Mailer\Manager::punycode()
      */
     public function normalizeEmail($email)
     {
@@ -146,8 +146,8 @@ class Manager extends Component
      *
      * @param array $config
      *
-     * @see \Phalcon\Mailer\Manager::registerSwiftTransport()
-     * @see \Phalcon\Mailer\Manager::registerSwiftMailer()
+     * @see \Phalcon\Ext\Mailer\Manager::registerSwiftTransport()
+     * @see \Phalcon\Ext\Mailer\Manager::registerSwiftMailer()
      */
     protected function configure(array $config)
     {
