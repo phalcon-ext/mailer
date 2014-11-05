@@ -3,11 +3,9 @@
  * Manager.php 2014-08-31 04:11
  * ----------------------------------------------
  *
- *
  * @author      Stanislav Kiryukhin <korsar.zn@gmail.com>
  * @copyright   Copyright (c) 2014, CKGroup.ru
  *
- * @version     0.0.1
  * ----------------------------------------------
  * All Rights Reserved.
  * ----------------------------------------------
@@ -17,6 +15,7 @@ namespace Phalcon\Ext\Mailer;
 use Phalcon\Config;
 use Phalcon\Mvc\User\Component;
 use Phalcon\Mvc\View;
+use Phalcon\DiInterface;
 
 /**
  * Class Manager
@@ -116,6 +115,10 @@ class Manager extends Component
      */
     public function getSwift()
     {
+        if (!$this->isInitSwiftMailer()) {
+            $this->registerSwiftMailer();
+        }
+
         return $this->mailer;
     }
 
@@ -152,9 +155,6 @@ class Manager extends Component
     protected function configure(array $config)
     {
         $this->config = $config;
-
-        $this->registerSwiftTransport();
-        $this->registerSwiftMailer();
     }
 
     /**
@@ -288,6 +288,7 @@ class Manager extends Component
      */
     protected function registerSwiftMailer()
     {
+        $this->registerSwiftTransport();
         $this->mailer = $this->getDI()->get('\Swift_Mailer', [$this->transport]);
     }
 
@@ -338,5 +339,29 @@ class Manager extends Component
 
             return $this->view = $view;
         }
+    }
+
+    /**
+     * Check init SwiftMailer
+     *
+     * @return bool
+     */
+    protected function isInitSwiftMailer()
+    {
+        return $this->mailer && $this->transport;
+    }
+
+    /**
+     * Returns the internal dependency injector
+     *
+     * @return \Phalcon\DiInterface
+     */
+    public function getDI()
+    {
+        if (!($di = parent::getDI()) && !($di instanceof DiInterface)) {
+            throw new \RuntimeException('A dependency injection object is required to access internal services');
+        }
+
+        return $di;
     }
 }
