@@ -10,16 +10,20 @@ Install composer in a common location or in your project:
     curl -s http://getcomposer.org/installer | php
 
 Create the composer.json file as follows:
-	{
-		"require": {
-			"phalcon-ext/mailer": "~2.0"
-		}
+
+```
+{
+	"require": {
+		"phalcon-ext/mailer": "~2.0"
 	}
+}
+```
 
 Run the composer installer:
 
-    php composer.phar install
-
+```bash
+php composer.phar install
+```
 
 Add in your the code
 
@@ -29,106 +33,115 @@ Add in your the code
 
 **SMTP**
 
-    $config = [
-    	'driver' 	 => 'smtp',
-    	'host'	 	 => 'smtp.gmail.com',
-    	'port'	 	 => 465,
-    	'encryption' => 'ssl',
-    	'username'   => 'example@gmail.com',
-    	'password'	 => 'your_password',
-    	'from'		 => [
-    			'email' => 'example@gmail.com',
-    			'name'	=> 'YOUR FROM NAME'
-    		]
-    ];
+```php
+$config = [
+    'driver' 	 => 'smtp',
+    'host'	 	 => 'smtp.gmail.com',
+    'port'	 	 => 465,
+    'encryption' => 'ssl',
+    'username'   => 'example@gmail.com',
+    'password'	 => 'your_password',
+    'from'		 => [
+    		'email' => 'example@gmail.com',
+    		'name'	=> 'YOUR FROM NAME'
+    	]
+];
+```
 
 **Sendmail**
 
-    $config = [
-    	'driver' 	 => 'sendmail',
-		'sendmail' 	 => '/usr/sbin/sendmail -bs',
-    	'from'		 => [
-    		'email' => 'example@gmail.com',
-    		'name'	=> 'YOUR FROM NAME'
-    	]
-    ];
+```php
+$config = [
+    'driver' 	 => 'sendmail',
+	'sendmail' 	 => '/usr/sbin/sendmail -bs',
+    'from'		 => [
+    	'email' => 'example@gmail.com',
+    	'name'	=> 'YOUR FROM NAME'
+    ]
+];
+```
 
 **PHP Mail**
 
-    $config = [
-    	'driver' 	 => 'mail',
-    	'from'		 => [
-    		'email' => 'example@gmail.com',
-    		'name'	=> 'YOUR FROM NAME'
-    	]
-    ];
-
+```php
+$config = [
+    'driver' 	 => 'mail',
+    'from'		 => [
+    	'email' => 'example@gmail.com',
+    	'name'	=> 'YOUR FROM NAME'
+    ]
+];
+```
 
 ## Example ##
 
 ### createMessage() ###
 
-	$mailer = new \Phalcon\Ext\Mailer\Manager($config);
-	
-	$message = $mailer->createMessage()
-			->to('example_to@gmail.com', 'OPTIONAL NAME')
-			->subject('Hello world!')
-			->content('Hello world!');
+```php
+$mailer = new \Phalcon\Ext\Mailer\Manager($config);
 
-	// Set the Cc addresses of this message.
-	$message->cc('example_cc@gmail.com');
+$message = $mailer->createMessage()
+		->to('example_to@gmail.com', 'OPTIONAL NAME')
+		->subject('Hello world!')
+		->content('Hello world!');
 
-	// Set the Bcc addresses of this message.
-	$message->bcc('example_bcc@gmail.com');
+// Set the Cc addresses of this message.
+$message->cc('example_cc@gmail.com');
 
-	// Send message
-	$message->send();
+// Set the Bcc addresses of this message.
+$message->bcc('example_bcc@gmail.com');
+
+// Send message
+$message->send();
+```
 
 ### createMessageFromView() ###
 
-	/**
-     * Global viewsDir for current instance Mailer\Manager.
-     * 
-     * This parameter is OPTIONAL, If it is not specified, 
-	 * use DI from view service (getViewsDir)
-     */
-	$config['viewsDir'] = __DIR__ . '/views/email/';
+```php
+/**
+ * Global viewsDir for current instance Mailer\Manager.
+ * 
+ * This parameter is OPTIONAL, If it is not specified, 
+ * use DI from view service (getViewsDir)
+ */
 
-	$mailer = new \Phalcon\Ext\Mailer\Manager($config);
+$config['viewsDir'] = __DIR__ . '/views/email/';
 
-	// view relative to the folder viewsDir (REQUIRED)
-	$viewPath = 'email/example_message';
+$mailer = new \Phalcon\Ext\Mailer\Manager($config);
 
-	// Set variables to views (OPTIONAL)
-	$params [ 
-		'var1' => 'VAR VALUE 1',
-		'var2' => 'VAR VALUE 2',
-		...
-		'varN' => 'VAR VALUE N',
-	];
+// view relative to the folder viewsDir (REQUIRED)
+$viewPath = 'email/example_message';
 
-	/**
-	 * The local path to the folder viewsDir only this message. (OPTIONAL)
-	 * 
-	 * This parameter is OPTIONAL, If it is not specified, 
-	 * use global parameter "viewsDir" from configuration.
-	 */
-	$viewsDirLocal = __DIR__ . '/views/email/local/';
-	
+// Set variables to views (OPTIONAL)
+$params [ 
+	'var1' => 'VAR VALUE 1',
+	'var2' => 'VAR VALUE 2',
+	...
+	'varN' => 'VAR VALUE N',
+];
 
-	$message = $mailer->createMessageFromView($viewPath, $params, $viewsDirLocal)
-			->to('example_to@gmail.com', 'OPTIONAL NAME')
-			->subject('Hello world!');
+/**
+ * The local path to the folder viewsDir only this message. (OPTIONAL)
+ * 
+ * This parameter is OPTIONAL, If it is not specified, 
+ * use global parameter "viewsDir" from configuration.
+ */
+$viewsDirLocal = __DIR__ . '/views/email/local/';
 
-	// Set the Cc addresses of this message.
-	$message->cc('example_cc@gmail.com');
 
-	// Set the Bcc addresses of this message.
-	$message->bcc('example_bcc@gmail.com');
+$message = $mailer->createMessageFromView($viewPath, $params, $viewsDirLocal)
+		->to('example_to@gmail.com', 'OPTIONAL NAME')
+		->subject('Hello world!');
 
-	// Send message
-	$message->send();
+// Set the Cc addresses of this message.
+$message->cc('example_cc@gmail.com');
 
+// Set the Bcc addresses of this message.
+$message->bcc('example_bcc@gmail.com');
+
+// Send message
+$message->send();
+```
 
 ## Events ##
 - mailer:beforeCreateMessage
