@@ -13,6 +13,7 @@
 namespace Phalcon\Ext\Mailer;
 
 use Phalcon\Config;
+use Phalcon\Exception;
 use Phalcon\Mvc\User\Component;
 use Phalcon\Mvc\View;
 use Phalcon\DiInterface;
@@ -329,13 +330,20 @@ class Manager extends Component
             return $this->view;
         } else {
 
+			/** @var $viewApp \Phalcon\Mvc\View */
+			$viewApp = $this->getDI()->get('view');
+
             if (!($viewsDir = $this->getConfig('viewsDir'))) {
-                $viewsDir = $this->getDI()->get('view')->getViewsDir();
+                $viewsDir = $viewApp->getViewsDir();
             }
 
             /** @var $view \Phalcon\Mvc\View\Simple */
             $view = $this->getDI()->get('\Phalcon\Mvc\View\Simple');
             $view->setViewsDir($viewsDir);
+
+			if ($engines = $viewApp->getRegisteredEngines()) {
+				$view->registerEngines($engines);
+			}
 
             return $this->view = $view;
         }
