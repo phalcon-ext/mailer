@@ -328,6 +328,22 @@ class Message
     }
 
     /**
+     * Add optionally an alternative body
+     *
+     * @param string $content
+     * @param string $contentType optional
+     * @param string $charset     optional
+     *
+     * @return $this
+     */
+    public function contentAlternative($content, $contentType = null, $charset = null)
+    {
+        $this->getSwiftMessage()->addPart($content, $contentType, $charset);
+
+        return $this;
+    }
+
+    /**
      * Set the Content-type of this message.
      *
      * @param string $contentType
