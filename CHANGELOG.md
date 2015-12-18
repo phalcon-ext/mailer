@@ -1,5 +1,18 @@
 # CHANGELOG
 
+## v2.0.3 (2014-12-18)
+- Added method `contentAlternative()` - optionally an alternative text body 
+- fix [#5](https://github.com/phalcon-ext/mailer/issues/5)
+
+## v2.0.2 (2014-03-03)
+- fix [#2](https://github.com/phalcon-ext/mailer/issues/2)
+
+## v2.0.1 (2014-11-05)
+- Changes in the private logic...
+  - Added protected method `isInitSwiftMailer()`
+  - Added lazy init `SwiftMailer`
+  - Added check for the required of dependency injection object
+  
 ## v2.0.0 (2014-10-16)
 - rename root namespace `\Phalcon\Mailer` to `\Phalcon\Ext\Mailer`
 - remove deprecated method `getMessage()` in class `\Phalcon\Ext\Mailer\Message`
