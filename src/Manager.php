@@ -20,7 +20,6 @@ use Phalcon\DiInterface;
 
 /**
  * Class Manager
- * @package Phalcon\Ext\Mailer
  */
 class Manager extends Component
 {
@@ -94,7 +93,7 @@ class Manager extends Component
      * - mailer:afterCreateMessage
      *
      * @param string $view
-     * @param array $params         optional
+     * @param array $params optional
      * @param null|string $viewsDir optional
      *
      * @return \Phalcon\Ext\Mailer\Message
@@ -330,8 +329,8 @@ class Manager extends Component
             return $this->view;
         } else {
 
-			/** @var $viewApp \Phalcon\Mvc\View */
-			$viewApp = $this->getDI()->get('view');
+            /** @var $viewApp \Phalcon\Mvc\View */
+            $viewApp = $this->getDI()->get('view');
 
             if (!($viewsDir = $this->getConfig('viewsDir'))) {
                 $viewsDir = $viewApp->getViewsDir();
@@ -341,9 +340,9 @@ class Manager extends Component
             $view = $this->getDI()->get('\Phalcon\Mvc\View\Simple');
             $view->setViewsDir($viewsDir);
 
-			if ($engines = $viewApp->getRegisteredEngines()) {
-				$view->registerEngines($engines);
-			}
+            if ($engines = $viewApp->getRegisteredEngines()) {
+                $view->registerEngines($engines);
+            }
 
             return $this->view = $view;
         }

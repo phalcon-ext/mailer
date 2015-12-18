@@ -15,7 +15,6 @@ namespace Phalcon\Ext\Mailer;
 
 /**
  * Class Message
- * @package Phalcon\Ext\Mailer
  */
 class Message
 {
@@ -302,7 +301,7 @@ class Message
      *
      * @param mixed $content
      * @param string $contentType optional
-     * @param string $charset     optional
+     * @param string $charset optional
      *
      * @return $this
      *
@@ -332,7 +331,7 @@ class Message
      *
      * @param string $content
      * @param string $contentType optional
-     * @param string $charset     optional
+     * @param string $charset optional
      *
      * @return $this
      */
@@ -542,9 +541,10 @@ class Message
      * @see Phalcon\Ext\Mailer\Message::createAttachmentViaPath()
      * @see Phalcon\Ext\Mailer\Message::prepareAttachment()
      */
-    public function attachment($file, Array $options = [])
+    public function attachment($file, array $options = [])
     {
         $attachment = $this->createAttachmentViaPath($file);
+
         return $this->prepareAttachment($attachment, $options);
     }
 
@@ -560,9 +560,10 @@ class Message
      * @see Phalcon\Ext\Mailer\Message::createAttachmentViaData()
      * @see Phalcon\Ext\Mailer\Message::prepareAttachment()
      */
-    public function attachmentData($data, $name, Array $options = [])
+    public function attachmentData($data, $name, array $options = [])
     {
         $attachment = $this->createAttachmentViaData($data, $name);
+
         return $this->prepareAttachment($attachment, $options);
     }
 
@@ -576,6 +577,7 @@ class Message
     public function embed($file)
     {
         $embed = $this->createEmbedViaPath($file);
+
         return $this->getSwiftMessage()->embed($embed);
     }
 
@@ -591,6 +593,7 @@ class Message
     public function embedData($data, $name, $contentType = null)
     {
         $embed = $this->createEmbedViaData($data, $name, $contentType);
+
         return $this->getSwiftMessage()->embed($embed);
     }
 
@@ -674,7 +677,7 @@ class Message
      *
      * @see \Swift_Message::attach()
      */
-    protected function prepareAttachment(\Swift_Attachment $attachment, Array $options = [])
+    protected function prepareAttachment(\Swift_Attachment $attachment, array $options = [])
     {
         if (isset($options['mime'])) {
             $attachment->setContentType($options['mime']);
@@ -715,7 +718,7 @@ class Message
     protected function createAttachmentViaPath($file)
     {
         /** @var $byteStream \Swift_ByteStream_FileByteStream */
-        $byteStream  = $this->getManager()->getDI()->get('\Swift_ByteStream_FileByteStream', [$file]);
+        $byteStream = $this->getManager()->getDI()->get('\Swift_ByteStream_FileByteStream', [$file]);
 
         /** @var $image \Swift_Attachment */
         $attachment = $this->getManager()->getDI()->get('\Swift_Attachment')
@@ -751,7 +754,7 @@ class Message
     protected function createEmbedViaPath($file)
     {
         /** @var $byteStream \Swift_ByteStream_FileByteStream */
-        $byteStream  = $this->getManager()->getDI()->get('\Swift_ByteStream_FileByteStream', [$file]);
+        $byteStream = $this->getManager()->getDI()->get('\Swift_ByteStream_FileByteStream', [$file]);
 
         /** @var $image \Swift_Image */
         $image = $this->getManager()->getDI()->get('\Swift_Image')
