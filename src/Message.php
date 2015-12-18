@@ -764,15 +764,16 @@ class Message
      * Create a Swift new Image.
      *
      * @param string $data
-     * @param string|null $name optional
+     * @param string|null $filename
+     * @param string|null $contentType
      *
      * @return \Swift_Image
      *
      * @see \Swift_Image::newInstance()
      */
-    protected function createEmbedViaData($data, $name = null)
+    protected function createEmbedViaData($data, $filename = null, $contentType = null)
     {
-        return $this->getManager()->getDI()->get('\Swift_Image', [$data, $name]);
+        return $this->getManager()->getDI()->get('\Swift_Image', [$data, $filename, $contentType]);
     }
 
     /**
