@@ -48,6 +48,19 @@ $config = [
 ];
 ```
 
+> **Warning**
+> If you are using GMAIL and get error `...Username and Password not accepted...` or `password incorrect`, 
+> please using password token ([how get token?](https://support.google.com/accounts/answer/185833)) and fix in configuration
+> 
+> ```php
+>   ...
+>
+>   'username' => 'example@gmail.com',
+>   'password' => 'your_password_token',
+>
+>   ...
+> ```
+
 **Sendmail**
 
 ```php
@@ -97,12 +110,11 @@ $message->send();
 
 ### createMessageFromView() ###
 
-```php
-
 > **Warning**
 > If you want to use as a template engine VOLT (.volt), 
 > please setup "view" service according to the official [docs](http://docs.phalconphp.com/en/latest/reference/volt.html#activating-volt) Phalcon
 
+```php
 /**
  * Global viewsDir for current instance Mailer\Manager.
  * 
