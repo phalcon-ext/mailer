@@ -306,16 +306,15 @@ class Manager extends Component
         $view = $this->getView();
 
         if ($viewsDir !== null) {
-            $viewsDirOld = $view->getViewsDir();
+            $view = clone $view;
             $view->setViewsDir($viewsDir);
-
-            $content = $view->render($viewPath, $params);
-            $view->setViewsDir($viewsDirOld);
-
-            return $content;
-        } else {
-            return $view->render($viewPath, $params);
         }
+
+        if (!$view->getViewsDir()) {
+            throw new \RuntimeException('Please set config property "viewsDir"');
+        }
+
+        return $view->render($viewPath, $params);
     }
 
     /**

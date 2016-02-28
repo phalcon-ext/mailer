@@ -98,13 +98,17 @@ $message->send();
 ### createMessageFromView() ###
 
 ```php
+
+> **Warning**
+> If you want to use as a template engine VOLT (.volt), 
+> please setup "view" service according to the official [docs](http://docs.phalconphp.com/en/latest/reference/volt.html#activating-volt) Phalcon
+
 /**
  * Global viewsDir for current instance Mailer\Manager.
  * 
  * This parameter is OPTIONAL, If it is not specified, 
- * use DI from view service (getViewsDir)
+ * use DI from "view" service (getViewsDir)
  */
-
 $config['viewsDir'] = __DIR__ . '/views/email/';
 
 $mailer = new \Phalcon\Ext\Mailer\Manager($config);
