@@ -13,7 +13,6 @@
 namespace Phalcon\Ext\Mailer;
 
 use Phalcon\Config;
-use Phalcon\Exception;
 use Phalcon\Mvc\User\Component;
 use Phalcon\Mvc\View;
 use Phalcon\DiInterface;
@@ -23,6 +22,16 @@ use Phalcon\DiInterface;
  */
 class Manager extends Component
 {
+    const AUTHENTICATION_MODE_CRAM_MD5  = 'CRAM-MD5';
+    const AUTHENTICATION_MODE_LOGIN     = 'LOGIN';
+    const AUTHENTICATION_MODE_NTLM      = 'NTLM';
+    const AUTHENTICATION_MODE_PLAIN     = 'PLAIN';
+    const AUTHENTICATION_MODE_OAUTH     = 'XOAUTH2';
+
+    const ENCRYPTION_NONE = '';
+    const ENCRYPTION_SSL  = 'ssl';
+    const ENCRYPTION_TLS  = 'tls';
+
     /**
      * @var array
      */
@@ -198,17 +207,44 @@ class Manager extends Component
         $config = $this->getConfig();
 
         /** @var $transport \Swift_SmtpTransport: */
-        $transport = $this->getDI()->get('\Swift_SmtpTransport')
-            ->setHost($config['host'])
-            ->setPort($config['port']);
+        $transport = $this->getDI()->get('\Swift_SmtpTransport');
 
         if (isset($config['encryption'])) {
-
             $transport->setEncryption($config['encryption']);
+        }
+
+        if (isset($config['host'])) {
+            $transport->setHost($config['host']);
+        } else {
+            $transport->setHost('localhost');
+        }
+
+        if (isset($config['port'])) {
+            $transport->setPort($config['port']);
+        } else {
+            switch ($transport->getEncryption()) {
+                case static::ENCRYPTION_SSL:
+                    $transport->setPort(465);
+                    break;
+
+                case static::ENCRYPTION_TLS:
+                    $transport->setPort(587);
+                    break;
+
+                default:
+                    $transport->setPort(25);
+            }
+        }
+
+        if (isset($config['auth_mode'])) {
+            $transport->setAuthMode($config['auth_mode']);
         }
 
         if (isset($config['username'])) {
             $transport->setUsername($this->normalizeEmail($config['username']));
+        }
+
+        if (isset($config['password'])) {
             $transport->setPassword($config['password']);
         }
 
