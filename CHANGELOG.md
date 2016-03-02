@@ -1,10 +1,10 @@
 # CHANGELOG
 
-## v2.0.3 (2014-12-18)
+## v2.0.3 (2015-12-18)
 - Added method `contentAlternative()` - optionally an alternative text body 
 - fix [#5](https://github.com/phalcon-ext/mailer/issues/5)
 
-## v2.0.2 (2014-03-03)
+## v2.0.2 (2015-03-03)
 - fix [#2](https://github.com/phalcon-ext/mailer/issues/2)
 
 ## v2.0.1 (2014-11-05)
