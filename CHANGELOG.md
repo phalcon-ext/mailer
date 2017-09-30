@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v2.1.0 (2017-09-30)
+- Fix [#7](https://github.com/phalcon-ext/mailer/issues/7)
+- Add support `auth_mode` [#6](https://github.com/phalcon-ext/mailer/issues/6)
+- Allow composers use Swiftmailer v6 [#8](https://github.com/phalcon-ext/mailer/pull/8)
+- Change license LGPL-3.0 to MIT
+
 ## v2.0.3 (2015-12-18)
 - Added method `contentAlternative()` - optionally an alternative text body 
 - fix [#5](https://github.com/phalcon-ext/mailer/issues/5)
