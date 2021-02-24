@@ -4,7 +4,7 @@
  * ----------------------------------------------
  *
  * @author      Stanislav Kiryukhin <korsar.zn@gmail.com>
- * @copyright   Copyright (c) 2014, CKGroup.ru
+ * @copyright   Copyright (c) 2014-2021
  *
  * ----------------------------------------------
  * All Rights Reserved.
@@ -13,14 +13,16 @@
 namespace Phalcon\Ext\Mailer;
 
 use Phalcon\Config;
-use Phalcon\Mvc\User\Component;
 use Phalcon\Mvc\View;
 use Phalcon\DiInterface;
+use Phalcon\Di\Injectable;
+use Phalcon\Events\ManagerInterface;
+use Phalcon\Events\EventsAwareInterface;
 
 /**
  * Class Manager
  */
-class Manager extends Component
+class Manager extends Injectable implements EventsAwareInterface
 {
     const AUTHENTICATION_MODE_CRAM_MD5  = 'CRAM-MD5';
     const AUTHENTICATION_MODE_LOGIN     = 'LOGIN';
@@ -31,6 +33,11 @@ class Manager extends Component
     const ENCRYPTION_NONE = '';
     const ENCRYPTION_SSL  = 'ssl';
     const ENCRYPTION_TLS  = 'tls';
+
+    /**
+     * @var ManagerInterface
+     */
+    protected $eventsManager;
 
     /**
      * @var array
@@ -60,6 +67,22 @@ class Manager extends Component
     public function __construct(array $config)
     {
         $this->configure($config);
+    }
+
+    /**
+     * Returns the internal event manager
+     * @return ManagerInterface
+     */
+    public function getEventsManager() {
+        return $this->eventsManager;
+    }
+
+    /**
+     * Sets the events manager
+     * @return void
+     */
+    public function setEventsManager(ManagerInterface $eventsManager) {
+        $this->eventsManager = $eventsManager;
     }
 
     /**

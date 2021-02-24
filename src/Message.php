@@ -5,7 +5,7 @@
  *
  *
  * @author      Stanislav Kiryukhin <korsar.zn@gmail.com>
- * @copyright   Copyright (c) 2014, CKGroup.ru
+ * @copyright   Copyright (c) 2014-2021
  *
  * ----------------------------------------------
  * All Rights Reserved.

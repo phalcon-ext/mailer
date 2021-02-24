@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v3.0.0 (2021-02-24)
+- Fix compatibility with Phalcon 4+ [#13](https://github.com/phalcon-ext/mailer/issues/13)
+
 ## v2.1.0 (2017-09-30)
 - Fix [#7](https://github.com/phalcon-ext/mailer/issues/7)
 - Add support `auth_mode` [#6](https://github.com/phalcon-ext/mailer/issues/6)

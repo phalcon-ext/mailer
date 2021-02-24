@@ -4,9 +4,7 @@
     "description": "Mailer component as wrapper over SwiftMailer for Phalcon.",
     "keywords": ["mailer", "phalcon", "phalcon-ext", "phalcon-mailer"],
     "minimum-stability": "stable",
-    "license": "LGPL",
-
-
+    "license": "MIT",
     "authors": [
         {
             "name": "Stanislav Kiryukhin",
@@ -14,12 +12,10 @@
             "role": "Founder and project lead"
         }
     ],
-
     "require": {
         "php": ">=5.4.0",
-        "swiftmailer/swiftmailer": "^5.4"
+        "swiftmailer/swiftmailer": "^5.4 || ^6.0.0"
     },
-
     "autoload": {
         "psr-4": {
             "Phalcon\\Ext\\Mailer\\": "src/"
