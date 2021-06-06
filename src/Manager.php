@@ -14,7 +14,7 @@ namespace Phalcon\Ext\Mailer;
 
 use Phalcon\Config;
 use Phalcon\Mvc\View;
-use Phalcon\DiInterface;
+use Phalcon\Di\DiInterface;
 use Phalcon\Di\Injectable;
 use Phalcon\Events\ManagerInterface;
 use Phalcon\Events\EventsAwareInterface;
@@ -73,7 +73,7 @@ class Manager extends Injectable implements EventsAwareInterface
      * Returns the internal event manager
      * @return ManagerInterface
      */
-    public function getEventsManager() {
+    public function getEventsManager(): ?ManagerInterface {
         return $this->eventsManager;
     }
 
@@ -81,8 +81,22 @@ class Manager extends Injectable implements EventsAwareInterface
      * Sets the events manager
      * @return void
      */
-    public function setEventsManager(ManagerInterface $eventsManager) {
+    public function setEventsManager(ManagerInterface $eventsManager): void {
         $this->eventsManager = $eventsManager;
+    }
+
+    /**
+     * Returns the internal dependency injector
+     *
+     * @return \Phalcon\DiInterface
+     */
+    public function getDI(): DiInterface
+    {
+        if (!($di = parent::getDI()) && !($di instanceof DiInterface)) {
+            throw new \RuntimeException('A dependency injection object is required to access internal services');
+        }
+
+        return $di;
     }
 
     /**
@@ -416,17 +430,4 @@ class Manager extends Injectable implements EventsAwareInterface
         return $this->mailer && $this->transport;
     }
 
-    /**
-     * Returns the internal dependency injector
-     *
-     * @return \Phalcon\DiInterface
-     */
-    public function getDI()
-    {
-        if (!($di = parent::getDI()) && !($di instanceof DiInterface)) {
-            throw new \RuntimeException('A dependency injection object is required to access internal services');
-        }
-
-        return $di;
-    }
 }
